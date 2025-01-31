@@ -7,7 +7,8 @@ import (
 )
 
 type jsonResponse struct {
-	Result int `json:"result"`
+	Message string `json:"message,omitempty"`
+	Result  int    `json:"result,omitempty"`
 }
 
 func writeJSON(w http.ResponseWriter, status int, data any, headers ...http.Header) error {
@@ -32,7 +33,16 @@ func writeJSON(w http.ResponseWriter, status int, data any, headers ...http.Head
 	return nil
 }
 
-func add(m *http.ServeMux) {
+func (c *Config) indexHandler(m *http.ServeMux) {
+	m.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		payload := jsonResponse{
+			Message: "Welcome to Calculator APP",
+		}
+		writeJSON(w, http.StatusOK, payload)
+	})
+}
+
+func (c *Config) addHandler(m *http.ServeMux) {
 
 	m.HandleFunc("POST /add", func(w http.ResponseWriter, r *http.Request) {
 		input1, _ := strconv.Atoi(r.URL.Query().Get("input1"))
@@ -45,7 +55,7 @@ func add(m *http.ServeMux) {
 
 }
 
-func subtract(m *http.ServeMux) {
+func (c *Config) subtractHandler(m *http.ServeMux) {
 
 	m.HandleFunc("POST /subtract", func(w http.ResponseWriter, r *http.Request) {
 		input1, _ := strconv.Atoi(r.URL.Query().Get("input1"))
@@ -58,7 +68,7 @@ func subtract(m *http.ServeMux) {
 
 }
 
-func multiply(m *http.ServeMux) {
+func (c *Config) multiplyHandler(m *http.ServeMux) {
 
 	m.HandleFunc("POST /multiply", func(w http.ResponseWriter, r *http.Request) {
 		input1, _ := strconv.Atoi(r.URL.Query().Get("input1"))
@@ -71,7 +81,7 @@ func multiply(m *http.ServeMux) {
 
 }
 
-func divide(m *http.ServeMux) {
+func (c *Config) divideHandler(m *http.ServeMux) {
 
 	m.HandleFunc("POST /divide", func(w http.ResponseWriter, r *http.Request) {
 		input1, _ := strconv.Atoi(r.URL.Query().Get("input1"))
