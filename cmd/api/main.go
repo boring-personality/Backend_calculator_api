@@ -18,6 +18,7 @@ func main() {
 	app.subtractHandler(mux)
 	app.multiplyHandler(mux)
 	app.divideHandler(mux)
+	app.sumHandler(mux)
 	url := fmt.Sprintf("localhost:%d", webPort)
 
 	if err := http.ListenAndServe(url, mux); err != nil {
